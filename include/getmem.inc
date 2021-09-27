@@ -8,7 +8,7 @@ native int GetMem();
 /**
  * Do not edit below this line!
  */
-public Extension __ext_geoip = 
+public Extension __ext_GetMem = 
 {
     name = "GetMem",
     file = "sm-getmem.ext",

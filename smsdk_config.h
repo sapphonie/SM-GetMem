@@ -7,14 +7,14 @@
  */
 
 /* Basic information exposed publicly */
-#define SMEXT_CONF_NAME			"GetMem"
-#define SMEXT_CONF_DESCRIPTION          "Get server memory usage in KB on linux and windows"
-#define SMEXT_CONF_VERSION		"0.0.1"
-#define SMEXT_CONF_AUTHOR		"Kxrnl, packaged and updated by sappho.io"
-#define SMEXT_CONF_URL			"."
-#define SMEXT_CONF_LOGTAG		"GetMem"
-#define SMEXT_CONF_LICENSE		"MIT"
-#define SMEXT_CONF_DATESTRING	        __DATE__
+#define SMEXT_CONF_NAME         "GetMem"
+#define SMEXT_CONF_DESCRIPTION  "Get server memory usage in KB on linux and windows"
+#define SMEXT_CONF_VERSION      "0.0.2"
+#define SMEXT_CONF_AUTHOR       "sappho.io, formerly written by Kxrnl"
+#define SMEXT_CONF_URL          "."
+#define SMEXT_CONF_LOGTAG       "GetMem"
+#define SMEXT_CONF_LICENSE      "MIT"
+#define SMEXT_CONF_DATESTRING   __DATE__
 
 /**
  * @brief Exposes plugin's main interface.

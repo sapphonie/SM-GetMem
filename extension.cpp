@@ -12,43 +12,36 @@ SMEXT_LINK(&g_GetMem);
 
 #else
 
-    //https://stackoverflow.com/a/64166/6638566
-    #include <stdlib.h>
-    #include <stdio.h>
-    #include <string.h>
+    #include <unistd.h>
+    #include <ios>
+    #include <iostream>
+    #include <fstream>
+    #include <string>
+    #include <unistd.h>
 
+    using namespace std;
 
-
-    int parseLine(char* line)
+    int GetUsedMemorySizeInKB()
     {
-        // This assumes that a digit will be found and the line ends in " Kb".
-        int i = strlen(line);
-        const char* p = line;
-        while (*p <'0' || *p > '9') p++;
-        line[i-3] = '\0';
-        i = atoi(p);
-        return i;
-    }
-
-    // Note: this value is in KB!
-    int getVmSizeInKB()
-    {
-        FILE* file = fopen("/proc/self/status", "r");
-        int result = -1;
-        char line[128];
-
-        while (fgets(line, 128, file) != NULL)
+        FILE* statm = fopen("/proc/self/statm", "r");
+        if (!statm)
         {
-            if (strncmp(line, "VmSize:", 7) == 0)
-            {
-                result = parseLine(line);
-                break;
-            }
+            return -1;
         }
 
-        fclose(file);
-        return result;
+        long rss_in_pages;
+        long virt_in_pages;
+        fscanf(statm, "%li %li", &virt_in_pages, &rss_in_pages);
+        fclose(statm);
+
+        // sysconf(_SC_PAGESIZE) returns in bytes, we need KB
+        double pagesize_in_kb    = sysconf(_SC_PAGESIZE) / 1024.0;
+
+        long rss_in_kb = rss_in_pages * pagesize_in_kb;
+        return rss_in_kb;
     }
+
+
 #endif
 
 static cell_t Native_GetMem(IPluginContext *pContext, const cell_t *params)
@@ -56,12 +49,12 @@ static cell_t Native_GetMem(IPluginContext *pContext, const cell_t *params)
     #ifdef _WIN32
         PROCESS_MEMORY_COUNTERS_EX pmc;
         GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-        SIZE_T virtualMemUsedByMe = pmc.PrivateUsage / 1024;
+        signed int  UsedMem = pmc.WorkingSetSize / 1024;
     #else
-        size_t virtualMemUsedByMe = getVmSizeInKB();
+        long        UsedMem = GetUsedMemorySizeInKB();
     #endif
 
-    return virtualMemUsedByMe;
+    return UsedMem;
 }
 
 const sp_nativeinfo_t GetMemNatives[] =

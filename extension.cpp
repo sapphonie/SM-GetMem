@@ -66,5 +66,7 @@ const sp_nativeinfo_t GetMemNatives[] =
 bool GetMem::SDK_OnLoad(char *error, size_t maxlen, bool late)
 {
     sharesys->AddNatives(myself, GetMemNatives);
+    sharesys->RegisterLibrary(myself, "GetMem");
+
     return true;
 }

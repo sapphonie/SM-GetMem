@@ -11,5 +11,7 @@ This extension has been wholly refactored, thanks to krxnl for giving me a good 
 
 # Usage
 Native provided as `Native int GetMem()`, returning mem usage in KB. With the plugin provided, use `sm_getmem`.
+
 `sm_cleanmem` - Run some memory cleaning commands (I recommend putting this in a server config / running it on map change)
+
 `sm_getmem` && `sm_getmem_mb` - Get current used mem of running server
